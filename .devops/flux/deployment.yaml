@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tribal-wars-bot-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tribal-wars-bot-server
+
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+
+  template:
+    metadata:
+      labels:
+        app: tribal-wars-bot-server
+
+    spec:
+      imagePullSecrets:
+        - name: github-registry
+
+      containers:
+        - name: tribal-wars-bot-server
+          image: ghcr.io/psalkowski/tribal-wars-bot-server:1.0.0
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 3333
+
+          envFrom:
+            - secretRef:
+                name: tribal-wars-bot-server
+
+          env:
+            - name: TZ
+              value: 'UTC'
+            - name: PORT
+              value: '3333'
+            - name: HOST
+              value: 'localhost'
+            - name: LOG_LEVEL
+              value: 'info'
+            - name: APP_KEY
+              value: 'zKXHe-Ahdb7aPK1ylAJlRgTefktEaACi'
+            - name: NODE_ENV
+              value: 'production'
+
+          readinessProbe:
+            tcpSocket:
+              port: 3333
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
+          livenessProbe:
+            tcpSocket:
+              port: 3333
+            initialDelaySeconds: 10
+            periodSeconds: 10

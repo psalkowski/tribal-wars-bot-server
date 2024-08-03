@@ -1,0 +1,13 @@
+{
+  "extends": "@adonisjs/tsconfig/tsconfig.app.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "./build",
+    "strict": false,
+    "noImplicitAny": false,
+    "noImplicitReturns" : true
+  },
+  "ts-node": {
+    "esm": true,
+  }
+}

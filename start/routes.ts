@@ -16,6 +16,8 @@ router
   .group(() => {
     router.get('agent', [AgentsController, 'index'])
     router.post('agent', [AgentsController, 'register'])
+    router.post('agent/start', [AgentsController, 'start'])
+    router.post('agent/stop', [AgentsController, 'stop'])
 
     router.get('farm-command', [FarmCommandsController, 'index'])
     router.post('farm-command', [FarmCommandsController, 'create'])

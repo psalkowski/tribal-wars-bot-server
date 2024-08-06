@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { prepareDateTime, serializeDateTime } from '../utils/date_time.js'
 
 interface ReportArmy {
   spear: { sent: number; lost: number }
@@ -77,14 +78,8 @@ export default class BattleReport extends BaseModel {
   declare lootCapacity: number
 
   @column.dateTime({
-    prepare: (value) => DateTime.fromMillis(value).toFormat('yyyy-MM-dd HH:mm:ss.SSS'),
-    serialize: (value: DateTime) => {
-      if (typeof value === 'number') {
-        return value
-      }
-
-      return value.toMillis()
-    },
+    prepare: prepareDateTime,
+    serialize: serializeDateTime,
   })
   declare battleAt: DateTime
 

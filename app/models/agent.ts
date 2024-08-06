@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import World from '#models/world'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import { prepareDateTime, serializeDateTime } from '../utils/date_time.js'
 
 export default class Agent extends BaseModel {
   @column({ isPrimary: true })
@@ -25,8 +26,11 @@ export default class Agent extends BaseModel {
   @belongsTo(() => World)
   declare world: BelongsTo<typeof World>
 
-  @column.dateTime()
-  declare startedAt: DateTime
+  @column.dateTime({
+    prepare: prepareDateTime,
+    serialize: serializeDateTime,
+  })
+  declare startedAt: DateTime | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

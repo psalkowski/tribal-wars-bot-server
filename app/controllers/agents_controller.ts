@@ -1,13 +1,11 @@
-import transmit from '@adonisjs/transmit/services/main'
 import { HttpContext } from '@adonisjs/core/http'
 import Agent from '#models/agent'
 import World from '#models/world'
+import { DateTime } from 'luxon'
 
 export default class AgentsController {
   async index({ request }: HttpContext) {
     const name = request.header('X-Agent', 'anonymous')
-
-    transmit.broadcast('my/custom/event', { message: 'Hello', foo: 123 })
 
     return Agent.findBy({ name })
   }
@@ -26,13 +24,36 @@ export default class AgentsController {
       {
         ip,
         enabled: true,
-        running: false,
+        running: true,
+        startedAt: DateTime.now(),
       }
     )
 
-    await agent.related('world').associate(world)
-    await agent.save()
+    if (!agent.startedAt) {
+      agent.running = true
+      agent.startedAt = DateTime.now()
+    }
 
-    return agent
+    await agent.related('world').associate(world)
+
+    return agent.save()
+  }
+
+  async start({ request }: HttpContext) {
+    const agent = await request.agent()
+
+    agent.startedAt = DateTime.now()
+    agent.running = true
+
+    return agent.save()
+  }
+
+  async stop({ request }: HttpContext) {
+    const agent = await request.agent()
+
+    agent.startedAt = null
+    agent.running = false
+
+    return agent.save()
   }
 }

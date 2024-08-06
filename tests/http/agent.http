@@ -1,0 +1,24 @@
+### POST - Start agent
+POST {{host}}/api/agent/start
+Accept: application/json
+X-Agent: raspberry
+
+### POST - Stop agent
+POST {{host}}/api/agent/stop
+Accept: application/json
+X-Agent: raspberry
+
+### POST - Register agent
+POST {{host}}/api/agent
+Accept: application/json
+X-Agent: raspberry
+Content-Type: application/json
+
+{
+  "world": "pl203"
+}
+
+### GET - Fetch agent
+GET {{host}}/api/agent
+Accept: application/json
+X-Agent: raspberry

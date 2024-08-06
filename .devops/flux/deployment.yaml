@@ -26,7 +26,7 @@ spec:
       containers:
         - name: tribal-wars-bot-server
           image: ghcr.io/psalkowski/tribal-wars-bot-server:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
 
           ports:
             - containerPort: 3333

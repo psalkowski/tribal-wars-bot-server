@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, hasOne } from '@adonisjs/lucid/orm'
 import World from '#models/world'
 import type { HasOne } from '@adonisjs/lucid/types/relations'
+import { prepareDateTime, serializeDateTime } from '../utils/date_time.js'
 
 export default class FarmCommand extends BaseModel {
   @column({ isPrimary: true })
@@ -65,26 +66,14 @@ export default class FarmCommand extends BaseModel {
   declare world: HasOne<typeof World>
 
   @column.dateTime({
-    prepare: (value) => DateTime.fromMillis(value).toFormat('yyyy-MM-dd HH:mm:ss.SSS'),
-    serialize: (value: DateTime) => {
-      if (typeof value === 'number') {
-        return value
-      }
-
-      return value.toMillis()
-    },
+    prepare: prepareDateTime,
+    serialize: serializeDateTime,
   })
   declare arriveAt: DateTime
 
   @column.dateTime({
-    prepare: (value) => DateTime.fromMillis(value).toFormat('yyyy-MM-dd HH:mm:ss.SSS'),
-    serialize: (value: DateTime) => {
-      if (typeof value === 'number') {
-        return value
-      }
-
-      return value.toMillis()
-    },
+    prepare: prepareDateTime,
+    serialize: serializeDateTime,
   })
   declare returnAt: DateTime
 
